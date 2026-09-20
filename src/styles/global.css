@@ -190,3 +190,9 @@ a:not([disabled]):active,
   transform: scale(0.975);
   transition: transform 0.1s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* ── Disable Home Indicator (iPhone bottom bar) globally ── */
+[class*="homeIndicator"],
+.homeIndicator {
+  display: none !important;
+}
