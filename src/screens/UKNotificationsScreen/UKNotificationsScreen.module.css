@@ -5,12 +5,60 @@
   max-width: 430px;
   margin: 0 auto;
   min-height: 100%;
-  background-color: #000000;
+  background: transparent;
   color: #FFFFFF;
   position: relative;
   overflow-y: auto;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ambientGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, calc(-50% - 96px));
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(191, 90, 242, 0.35) 0%,
+    rgba(175, 82, 222, 0.22) 20%,
+    rgba(140, 68, 210, 0.12) 40%,
+    rgba(100, 50, 180, 0.05) 60%,
+    transparent 75%
+  );
+  border-radius: 50%;
+  filter: blur(50px);
+  animation: ambientPulse 6s ease-in-out infinite;
+}
+
+.ambientGlow::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 45%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(
+    circle,
+    rgba(10, 132, 255, 0.14) 0%,
+    rgba(88, 86, 214, 0.08) 35%,
+    transparent 65%
+  );
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: ambientPulse 8s ease-in-out infinite reverse;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 /* Nav Bar */
@@ -28,16 +76,33 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.backBtn, .readAllBtn {
+.navBar > * {
+  flex: 1;
+}
+
+.backBtn {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   background: transparent;
   border: none;
   color: #BF5AF2; /* Apple Purple */
   font-size: 17px;
   cursor: pointer;
   padding: 0;
-  display: flex;
-  align-items: center;
   gap: 4px;
+}
+
+.readAllBtn {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: #BF5AF2; /* Apple Purple */
+  font-size: 17px;
+  cursor: pointer;
+  padding: 0;
 }
 
 .backBtn svg {
@@ -46,6 +111,8 @@
 }
 
 .navTitle {
+  flex: 2 !important;
+  text-align: center;
   font-size: 17px;
   font-weight: 600;
   color: #FFFFFF;

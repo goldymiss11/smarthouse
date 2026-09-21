@@ -95,6 +95,40 @@ export const BillAnalysisScreen: React.FC<BillAnalysisScreenProps> = ({ onBack }
       </header>
 
       <div className={styles.content}>
+        <div className={styles.chartCardWrapper}>
+          <div className={styles.chartCard}>
+            <div className={styles.chartHeader}>
+              <h3 className={styles.chartTitle}>Динамика расходов</h3>
+              <button className={styles.chartToggleBtn} onClick={() => setShowExtendedChart(!showExtendedChart)}>
+                {showExtendedChart ? 'Свернуть' : 'Подробнее'}
+              </button>
+            </div>
+            
+            <div className={styles.chartList}>
+              {(showExtendedChart ? expenseHistory : expenseHistory.slice(-2)).map((item) => (
+                <div
+                  key={item.id}
+                  className={`${styles.chartRow} ${item.isCurrent ? styles.chartRowCurrent : ''}`}
+                >
+                  <div className={styles.chartLabelRow}>
+                    <div className={styles.monthBadgeWrapper}>
+                      <span className={styles.chartMonthName}>{item.month}</span>
+                      {item.isCurrent && <span className={styles.currentMonthBadge}>Текущий</span>}
+                    </div>
+                    <span className={styles.chartAmount}>{item.amount}</span>
+                  </div>
+                  <div className={styles.barTrack}>
+                    <div
+                      className={item.isCurrent ? styles.barFillCurrent : styles.barFillBlue}
+                      style={{ width: `${item.percentage}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className={styles.chatArea}>
           {messages.map((msg) => (
             <div key={msg.id} className={`${styles.messageWrapper} ${msg.sender === 'user' ? styles.messageUser : styles.messageAi}`}>
@@ -104,38 +138,6 @@ export const BillAnalysisScreen: React.FC<BillAnalysisScreenProps> = ({ onBack }
             </div>
           ))}
           <div ref={messagesEndRef} />
-        </div>
-
-        <div className={styles.chartCard}>
-          <div className={styles.chartHeader}>
-            <h3 className={styles.chartTitle}>Динамика расходов</h3>
-            <button className={styles.chartToggleBtn} onClick={() => setShowExtendedChart(!showExtendedChart)}>
-              {showExtendedChart ? 'Свернуть' : 'Подробнее'}
-            </button>
-          </div>
-          
-          <div className={styles.chartList}>
-            {(showExtendedChart ? expenseHistory : expenseHistory.slice(-2)).map((item) => (
-              <div
-                key={item.id}
-                className={`${styles.chartRow} ${item.isCurrent ? styles.chartRowCurrent : ''}`}
-              >
-                <div className={styles.chartLabelRow}>
-                  <div className={styles.monthBadgeWrapper}>
-                    <span className={styles.chartMonthName}>{item.month}</span>
-                    {item.isCurrent && <span className={styles.currentMonthBadge}>Текущий</span>}
-                  </div>
-                  <span className={styles.chartAmount}>{item.amount}</span>
-                </div>
-                <div className={styles.barTrack}>
-                  <div
-                    className={item.isCurrent ? styles.barFillCurrent : styles.barFillBlue}
-                    style={{ width: `${item.percentage}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 

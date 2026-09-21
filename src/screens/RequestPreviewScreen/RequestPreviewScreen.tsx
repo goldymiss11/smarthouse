@@ -156,8 +156,6 @@ export const RequestPreviewScreen: React.FC<RequestPreviewScreenProps> = ({
       <header className={styles.navBar}>
         <button className={styles.backBtn} onClick={onBack} aria-label="Назад">
           <svg
-            width="20"
-            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -357,8 +355,18 @@ export const RequestPreviewScreen: React.FC<RequestPreviewScreenProps> = ({
                 className={styles.fieldInputSingle}
                 type="text"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  let val = e.target.value.replace(/\D/g, '');
+                  if (val.startsWith('7') || val.startsWith('8')) val = val.substring(1);
+                  let formatted = '+7';
+                  if (val.length > 0) formatted += ` (${val.substring(0, 3)}`;
+                  if (val.length >= 3) formatted += `) ${val.substring(3, 6)}`;
+                  if (val.length >= 6) formatted += `-${val.substring(6, 8)}`;
+                  if (val.length >= 8) formatted += `-${val.substring(8, 10)}`;
+                  setPhone(val.length === 0 ? '' : formatted);
+                }}
                 placeholder="+7 (___) ___-__-__"
+                maxLength={18}
               />
             </div>
           </div>

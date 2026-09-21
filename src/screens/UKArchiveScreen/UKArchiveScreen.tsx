@@ -39,6 +39,7 @@ export const UKArchiveScreen: React.FC<UKArchiveScreenProps> = ({ onBack }) => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.ambientGlow} aria-hidden="true" />
       <div className={styles.navBar}>
         <button className={styles.backBtn} onClick={onBack}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -77,6 +77,7 @@ const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('auth');
   const [lastResidentScreen, setLastResidentScreen] = useState<ScreenType>('auth');
   const [capturedPhoto, setCapturedPhoto] = useState<string | undefined>(undefined);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   useEffect(() => {
     // 1. Инициализация MAX Bridge
@@ -88,6 +89,14 @@ const App: React.FC = () => {
     if (initialScreen && screenOrder.includes(initialScreen)) {
       setCurrentScreen(initialScreen);
     }
+
+    // 3. Отслеживание клавиатуры
+    const handleResize = () => {
+      // Если высота окна меньше 600px, скорее всего открыта клавиатура
+      setIsKeyboardOpen(window.innerHeight < 600);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const currentRole: Role = residentScreens.includes(currentScreen) ? 'resident' : 'uk';
@@ -263,7 +272,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Глобальный TabBar для жителя */}
-      {['mainFeed', 'billsDashboard', 'billAnalysis', 'meters', 'profile'].includes(currentScreen) && (
+      {['mainFeed', 'billsDashboard', 'billAnalysis', 'meters', 'profile'].includes(currentScreen) && !isKeyboardOpen && (
         <TabBar 
           currentTab={currentScreen === 'profile' ? 'account' : currentScreen === 'mainFeed' ? 'mainFeed' : 'billsDashboard'} 
           onChangeTab={(tab) => {
@@ -275,7 +284,7 @@ const App: React.FC = () => {
       )}
 
       {/* Глобальный TabBar для УК */}
-      {['ukDashboard', 'ukBroadcast', 'ukObjects', 'ukProfile'].includes(currentScreen) && (
+      {['ukDashboard', 'ukBroadcast', 'ukObjects', 'ukProfile'].includes(currentScreen) && !isKeyboardOpen && (
         <UKTabBar 
           activeTab={
             currentScreen === 'ukDashboard' ? 'requests' : 

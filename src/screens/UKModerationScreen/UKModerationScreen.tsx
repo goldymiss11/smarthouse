@@ -45,12 +45,18 @@ export const UKModerationScreen: React.FC<UKModerationScreenProps> = ({
     setTouchStartY(null);
   };
 
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
+
   const handleConfirm = async () => {
     setIsLoadingConfirm(true);
     try {
-      // Stub fetch
       await new Promise(resolve => setTimeout(resolve, 1500));
-      onConfirm();
+      setSuccessMsg('Успешно одобрено');
+      setIsSuccess(true);
+      setTimeout(() => {
+        onConfirm();
+      }, 2000);
     } catch (e) {
       console.error(e);
     } finally {
@@ -61,15 +67,35 @@ export const UKModerationScreen: React.FC<UKModerationScreenProps> = ({
   const handleRejectSubmit = async () => {
     setIsLoadingReject(true);
     try {
-      // Stub fetch
       await new Promise(resolve => setTimeout(resolve, 1500));
-      onReject();
+      setIsRejectSheetOpen(false);
+      setSuccessMsg('Заявка отклонена');
+      setIsSuccess(true);
+      setTimeout(() => {
+        onReject();
+      }, 2000);
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoadingReject(false);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <div className={styles.screen} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.ambientGlow} aria-hidden="true" />
+        <div style={{ textAlign: 'center', zIndex: 10 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 32, background: 'rgba(48, 209, 88, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#30D158' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h2 style={{ fontSize: 24, fontWeight: 600, color: '#FFF' }}>{successMsg}</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.screen}>

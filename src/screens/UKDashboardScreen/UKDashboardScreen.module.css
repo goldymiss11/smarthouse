@@ -299,3 +299,40 @@
   color: rgba(235, 235, 245, 0.30);
   margin-left: 12px;
 }
+
+.requestTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.requestStatus {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: -0.1px;
+}
+
+.statusPending {
+  color: #FFD60A;
+  background: rgba(255, 214, 10, 0.15);
+}
+
+.statusApproved {
+  color: #30D158;
+  background: rgba(48, 209, 88, 0.15);
+}
+
+.statusRejected {
+  color: #FF453A;
+  background: rgba(255, 69, 58, 0.15);
+}
+
+.glassCard {
+  background: rgba(30, 30, 30, 0.75);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}

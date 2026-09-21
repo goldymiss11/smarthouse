@@ -11,7 +11,7 @@
 }
 
 /* 
-  iOS-style push/pop transitions 
+  Smooth fade transitions 
 */
 .screenWrapper {
   position: absolute;
@@ -24,35 +24,21 @@
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+  z-index: 1;
 }
 
 .screenWrapper::-webkit-scrollbar {
   display: none;
 }
 
-/* The active screen is in the center */
 .screenWrapper.active {
-  display: block;
+  opacity: 1;
+  visibility: visible;
   z-index: 2;
   pointer-events: auto;
-  animation: screenFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Inactive screens are completely removed from rendering so they can never leak, intercept clicks or cause scroll */
-.screenWrapper.slide-left,
-.screenWrapper.slide-right {
-  display: none !important;
-}
-
-@keyframes screenFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.99);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 /* App Root Shell */

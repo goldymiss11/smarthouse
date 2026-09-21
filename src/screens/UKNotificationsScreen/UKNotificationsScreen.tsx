@@ -86,53 +86,58 @@ export const UKNotificationsScreen: React.FC<UKNotificationsScreenProps> = ({ on
 
   return (
     <div className={styles.container}>
-      <div className={styles.navBar}>
-        <button className={styles.backBtn} onClick={onBack}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          Назад
-        </button>
-        <div className={styles.navTitle}>Уведомления</div>
-        {notifications.length > 0 && (
-          <button className={styles.readAllBtn} onClick={handleReadAll}>
-            Прочитать все
+      <div className={styles.ambientGlow} />
+      <div className={styles.content}>
+        <div className={styles.navBar}>
+          <button className={styles.backBtn} onClick={onBack}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Назад
           </button>
-        )}
-      </div>
+          <div className={styles.navTitle}>Уведомления</div>
+          {notifications.length > 0 ? (
+            <button className={styles.readAllBtn} onClick={handleReadAll}>
+              Прочитать все
+            </button>
+          ) : (
+            <div style={{ width: '40px' }} />
+          )}
+        </div>
 
-      <div className={styles.list}>
-        {notifications.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px 20px', color: 'rgba(235, 235, 245, 0.6)' }}>
-            Нет новых уведомлений
-          </div>
-        ) : (
-          notifications.map(notif => {
-            const isCurrentlyUnread = notif.isUnread && !readIds.includes(notif.id);
-            
-            return (
-              <div 
-                key={notif.id} 
-                className={`${styles.item} ${isCurrentlyUnread ? styles.unread : ''}`}
-                onClick={() => markAsRead(notif.id)}
-              >
-                <div className={styles.unreadDotWrap}>
-                  {isCurrentlyUnread && <div className={styles.unreadDot} />}
-                </div>
-                
-                {getIcon(notif.type)}
-
-                <div className={styles.itemContent}>
-                  <div className={styles.itemHeader}>
-                    <h3 className={styles.itemTitle}>{notif.title}</h3>
-                    <span className={styles.itemTime}>{notif.time}</span>
+        <div className={styles.list}>
+          {notifications.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '40px 20px', color: 'rgba(235, 235, 245, 0.6)' }}>
+              Нет новых уведомлений
+            </div>
+          ) : (
+            notifications.map(notif => {
+              const isCurrentlyUnread = notif.isUnread && !readIds.includes(notif.id);
+              
+              return (
+                <div 
+                  key={notif.id} 
+                  className={`${styles.item} ${isCurrentlyUnread ? styles.unread : ''}`}
+                  onClick={() => markAsRead(notif.id)}
+                >
+                  <div className={styles.unreadDotWrap}>
+                    {isCurrentlyUnread && <div className={styles.unreadDot} />}
                   </div>
-                  <p className={styles.itemText}>{notif.text}</p>
+                  
+                  {getIcon(notif.type)}
+
+                  <div className={styles.itemContent}>
+                    <div className={styles.itemHeader}>
+                      <h3 className={styles.itemTitle}>{notif.title}</h3>
+                      <span className={styles.itemTime}>{notif.time}</span>
+                    </div>
+                    <p className={styles.itemText}>{notif.text}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
+        </div>
       </div>
     </div>
   );

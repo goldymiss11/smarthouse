@@ -58,6 +58,62 @@
   margin-bottom: 24px;
 }
 
+.addressContainer {
+  position: relative;
+}
+
+.addressDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: saturate(180%) blur(25px);
+  -webkit-backdrop-filter: saturate(180%) blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 8px;
+  width: 260px;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: scaleIn 0.2s var(--ease-out-expo) both;
+  transform-origin: top left;
+}
+
+.addressDropdownItem {
+  padding: 12px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.addressDropdownItem:active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.addressDropdownText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.addressDropdownDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 12px;
+}
+
+.addressDropdownAdd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
 .addressWrap {
   display: flex;
   align-items: center;
@@ -287,6 +343,15 @@
 .statusActive .badge {
   background: rgba(255, 69, 58, 0.1);
   color: #FF453A;
+}
+
+.statusArchive .cardIconWrap {
+  background: rgba(120, 120, 128, 0.15);
+  color: #8E8E93;
+}
+.statusArchive .badge {
+  background: rgba(120, 120, 128, 0.1);
+  color: #8E8E93;
 }
 
 /* FAB - Eye-catching pink-purple round button */

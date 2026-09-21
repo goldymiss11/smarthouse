@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './UKAnalyticsScreen.module.css';
 
 interface UKAnalyticsScreenProps {
@@ -16,8 +16,11 @@ export const UKAnalyticsScreen: React.FC<UKAnalyticsScreenProps> = ({ onBack }) 
     { day: 'Вс', value: 20 },
   ];
 
+  const [activeBar, setActiveBar] = useState<number | null>(null);
+
   return (
     <div className={styles.container}>
+      <div className={styles.ambientGlow} aria-hidden="true" />
       <div className={styles.navBar}>
         <button className={styles.backBtn} onClick={onBack}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -71,14 +74,40 @@ export const UKAnalyticsScreen: React.FC<UKAnalyticsScreenProps> = ({ onBack }) 
         </div>
 
         <div className={styles.chartCard}>
-          <div className={styles.chartHeader}>Нагрузка по дням</div>
-          <div className={styles.verticalChart}>
+          <div className={styles.chartHeader} style={{ position: 'relative' }}>
+            Нагрузка по дням
+            {activeBar !== null && (
+              <span style={{ position: 'absolute', right: 0, color: '#BF5AF2', fontWeight: 'bold' }}>
+                {weeklyData[activeBar].value} заявок
+              </span>
+            )}
+          </div>
+          <div 
+            className={styles.verticalChart}
+            onTouchStart={(e) => {
+              const touch = e.touches[0];
+              const chartRect = e.currentTarget.getBoundingClientRect();
+              const x = touch.clientX - chartRect.left;
+              const barWidth = chartRect.width / weeklyData.length;
+              const index = Math.floor(x / barWidth);
+              if (index >= 0 && index < weeklyData.length) setActiveBar(index);
+            }}
+            onTouchMove={(e) => {
+              const touch = e.touches[0];
+              const chartRect = e.currentTarget.getBoundingClientRect();
+              const x = touch.clientX - chartRect.left;
+              const barWidth = chartRect.width / weeklyData.length;
+              const index = Math.floor(x / barWidth);
+              if (index >= 0 && index < weeklyData.length) setActiveBar(index);
+            }}
+            onTouchEnd={() => setActiveBar(null)}
+          >
             {weeklyData.map((item, idx) => (
               <div key={idx} className={styles.barCol}>
                 <div className={styles.barWrapper}>
-                  <div className={styles.vBar} style={{ height: `${item.value}%` }} />
+                  <div className={styles.vBar} style={{ height: `${item.value}%`, filter: activeBar === idx ? 'brightness(1.5)' : 'none' }} />
                 </div>
-                <div className={styles.barDay}>{item.day}</div>
+                <div className={styles.barDay} style={{ color: activeBar === idx ? '#FFF' : 'rgba(235, 235, 245, 0.6)' }}>{item.day}</div>
               </div>
             ))}
           </div>

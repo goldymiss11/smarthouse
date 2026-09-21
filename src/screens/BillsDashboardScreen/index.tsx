@@ -1,6 +1,7 @@
-import React, { useState, TouchEvent } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './BillsDashboardScreen.module.css';
+import { useSwipeClose } from '../../hooks/useSwipeClose';
 
 interface BillsDashboardScreenProps {
   onDetailedAnalysis: () => void;
@@ -26,27 +27,10 @@ const MOCK_RECEIPTS: Receipt[] = [
 
 export const BillsDashboardScreen: React.FC<BillsDashboardScreenProps> = ({ onDetailedAnalysis, onNavigate }) => {
   const [selectedReceiptId, setSelectedReceiptId] = useState<string | null>(null);
-  const [touchStartY, setTouchStartY] = useState<number | null>(null);
 
   const selectedReceipt = MOCK_RECEIPTS.find(r => r.id === selectedReceiptId) || null;
 
-  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
-    setTouchStartY(e.touches[0].clientY);
-  };
-
-  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
-    if (touchStartY === null) return;
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - touchStartY;
-    if (diff > 50) {
-      setSelectedReceiptId(null);
-      setTouchStartY(null);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setTouchStartY(null);
-  };
+  const swipeHandlers = useSwipeClose(() => setSelectedReceiptId(null));
 
   return (
     <div className={styles.container}>
@@ -202,9 +186,7 @@ export const BillsDashboardScreen: React.FC<BillsDashboardScreenProps> = ({ onDe
           <div 
             className={styles.modalSheet}
             onClick={(e) => e.stopPropagation()}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            {...swipeHandlers}
           >
             <div className={styles.grabberWrap} onClick={() => setSelectedReceiptId(null)}>
               <div className={styles.grabber} />

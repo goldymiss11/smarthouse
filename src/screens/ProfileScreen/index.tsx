@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './ProfileScreen.module.css';
+import { useSwipeClose } from '../../hooks/useSwipeClose';
 
 interface Offer {
   id: string;
@@ -71,6 +72,13 @@ export const ProfileScreen: React.FC = () => {
   const [showLogout, setShowLogout] = useState<boolean>(false);
   const [showApplyCashback, setShowApplyCashback] = useState<boolean>(false);
   const [toast, setToast] = useState<string | null>(null);
+
+  const swipeAvatar = useSwipeClose(() => setShowAvatarSheet(false));
+  const swipeSettings = useSwipeClose(() => setShowSettingsModal(false));
+  const swipeOffer = useSwipeClose(() => setActiveOffer(null));
+  const swipeCashback = useSwipeClose(() => setShowApplyCashback(false));
+  const swipeModal = useSwipeClose(() => setActiveModal(null));
+  const swipeLogout = useSwipeClose(() => setShowLogout(false));
 
   const notify = (msg: string) => {
     setToast(msg);
@@ -353,7 +361,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 1. Модалка: Смена аватара */}
       {showAvatarSheet && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setShowAvatarSheet(false)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeAvatar}>
             <div className={styles.grabber} />
             <div className={styles.modalHeader}>
               <h3 className={styles.modalTitle}>Фото профиля</h3>
@@ -395,7 +403,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 2. Модалка: Настройки (открывается по кнопке) */}
       {showSettingsModal && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setShowSettingsModal(false)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeSettings}>
             <div className={styles.grabber} />
             <div className={styles.modalHeader}>
               <h3 className={styles.modalTitle}>Настройки</h3>
@@ -460,7 +468,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 3. Модалка: Детали предложения кешбэка */}
       {activeOffer && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setActiveOffer(null)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeOffer}>
             <div className={styles.grabber} />
             
             <div className={styles.modalHeader}>
@@ -505,7 +513,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 4. Модалка: Списание кешбэка */}
       {showApplyCashback && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setShowApplyCashback(false)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeCashback}>
             <div className={styles.grabber} />
             
             <div className={styles.modalHeader}>
@@ -541,7 +549,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 5. Модалка: Быстрые действия (Карты, Бонусы) */}
       {activeModal && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setActiveModal(null)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeModal}>
             <div className={styles.grabber} />
             
             <div className={styles.modalHeader}>
@@ -610,7 +618,7 @@ export const ProfileScreen: React.FC = () => {
       {/* 6. Диалог подтверждения выхода */}
       {showLogout && createPortal(
         <div className={styles.modalBackdrop} onClick={() => setShowLogout(false)}>
-          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modalSheet} onClick={(e) => e.stopPropagation()} {...swipeLogout}>
             <div className={styles.grabber} />
             
             <div style={{ textAlign: 'center', margin: '8px 0 20px' }}>
