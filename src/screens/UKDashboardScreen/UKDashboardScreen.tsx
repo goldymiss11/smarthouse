@@ -7,9 +7,10 @@ export interface UKDashboardScreenProps {
 }
 
 const filters = [
+  { id: 'all', label: 'Все заявки' },
+  { id: 'new', label: 'Новые' },
   { id: 'pending', label: 'Ожидают' },
   { id: 'verified', label: 'Проверены' },
-  { id: 'new', label: 'Новые' },
   { id: 'archive', label: 'Архив' }
 ];
 
@@ -19,6 +20,7 @@ const mockRequests = [
     title: 'Отключение горячей воды',
     address: 'ул. Космонавтов 34а, кв. 12',
     status: 'pending',
+    isNew: true,
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2C12 2 6 8.5 6 13.5a6 6 0 0 0 12 0C18 8.5 12 2 12 2z" />
@@ -31,6 +33,7 @@ const mockRequests = [
     title: 'Шум в подъезде',
     address: 'ул. Космонавтов 34а, кв. 45',
     status: 'approved',
+    isNew: false,
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
@@ -44,6 +47,7 @@ const mockRequests = [
     title: 'Протечка трубы',
     address: 'ул. Космонавтов 34б, кв. 8',
     status: 'rejected',
+    isNew: false,
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
@@ -59,18 +63,16 @@ const statusLabels: Record<string, { label: string; colorClass: string }> = {
 };
 
 export const UKDashboardScreen: React.FC<UKDashboardScreenProps> = ({ onOpenRequest, onNavigate }) => {
-  const [activeFilter, setActiveFilter] = useState('pending');
+  const [activeFilter, setActiveFilter] = useState('all');
 
   const filteredRequests = mockRequests.filter(req => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'new') return req.isNew;
     if (activeFilter === 'pending') return req.status === 'pending';
     if (activeFilter === 'verified') return req.status === 'approved' || req.status === 'rejected';
-    if (activeFilter === 'new') return req.status === 'approved';
-    if (activeFilter === 'archive') return req.status === 'rejected';
+    if (activeFilter === 'archive') return req.status === 'rejected'; // Mock archive logic
     return true;
   });
-
-  const pendingCount = mockRequests.filter(r => r.status === 'pending').length;
-  const verifiedCount = mockRequests.filter(r => r.status === 'approved' || r.status === 'rejected').length;
 
   return (
     <>
@@ -93,13 +95,13 @@ export const UKDashboardScreen: React.FC<UKDashboardScreenProps> = ({ onOpenRequ
           </header>
 
           <section className={`${styles.metricsGrid} ${styles.animateStagger2}`}>
-            <div className={`${styles.metricCard} ${styles.glassCard}`}>
-              <span className={`${styles.metricValue} ${styles.purple}`}>{pendingCount}</span>
-              <span className={styles.metricLabel}>Ожидают</span>
+            <div className={styles.metricCard}>
+              <span className={`${styles.metricValue} ${styles.purple}`}>5</span>
+              <span className={styles.metricLabel}>Новые заявки</span>
             </div>
-            <div className={`${styles.metricCard} ${styles.glassCard}`}>
-              <span className={`${styles.metricValue} ${styles.indigo}`}>{verifiedCount}</span>
-              <span className={styles.metricLabel}>Проверены</span>
+            <div className={styles.metricCard}>
+              <span className={`${styles.metricValue} ${styles.indigo}`}>12</span>
+              <span className={styles.metricLabel}>В работе</span>
             </div>
           </section>
 

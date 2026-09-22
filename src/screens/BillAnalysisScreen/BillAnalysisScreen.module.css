@@ -72,13 +72,22 @@
   width: 60px;
 }
 
+.chartFixedArea {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  padding: var(--sp-20);
+  z-index: 20;
+}
+
 .content {
   position: relative;
   z-index: 10;
   flex: 1;
   overflow-y: auto;
   padding: 0 var(--sp-20);
-  padding-top: calc(var(--sa-top) + 80px); /* 60px navBar + 20px space */
+  padding-top: calc(var(--sa-top) + 60px);
   padding-bottom: 240px; /* space for bottom fixed + tabbar */
   display: flex;
   flex-direction: column;

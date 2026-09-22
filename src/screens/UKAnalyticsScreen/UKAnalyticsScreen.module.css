@@ -202,3 +202,21 @@
   font-size: 12px;
   color: rgba(235, 235, 245, 0.6);
 }
+
+.tooltipPill {
+  position: absolute;
+  top: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(191, 90, 242, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: baseline;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(191, 90, 242, 0.3);
+}

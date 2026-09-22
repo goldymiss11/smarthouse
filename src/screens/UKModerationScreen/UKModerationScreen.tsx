@@ -56,6 +56,7 @@ export const UKModerationScreen: React.FC<UKModerationScreenProps> = ({
       setIsSuccess(true);
       setTimeout(() => {
         onConfirm();
+        setTimeout(() => setIsSuccess(false), 500);
       }, 2000);
     } catch (e) {
       console.error(e);
@@ -73,6 +74,7 @@ export const UKModerationScreen: React.FC<UKModerationScreenProps> = ({
       setIsSuccess(true);
       setTimeout(() => {
         onReject();
+        setTimeout(() => setIsSuccess(false), 500);
       }, 2000);
     } catch (e) {
       console.error(e);

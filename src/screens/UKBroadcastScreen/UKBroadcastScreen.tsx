@@ -71,6 +71,7 @@ export const UKBroadcastScreen: React.FC = () => {
 
   const [isSending, setIsSending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const handleSubmit = async () => {
     let hasError = false;
@@ -96,7 +97,15 @@ export const UKBroadcastScreen: React.FC = () => {
 
     setIsSending(true);
     try {
-      await new Promise(r => setTimeout(r, 2000)); // Simulate expensive network request with loader
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (message.toLowerCase().includes('error') || message.toLowerCase().includes('ошибка')) {
+            reject(new Error('Simulated error'));
+          } else {
+            resolve(true);
+          }
+        }, 2000);
+      });
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
@@ -105,6 +114,10 @@ export const UKBroadcastScreen: React.FC = () => {
       }, 2500);
     } catch (e) {
       console.error(e);
+      setIsError(true);
+      setTimeout(() => {
+        setIsError(false);
+      }, 2500);
     } finally {
       setIsSending(false);
     }
@@ -141,6 +154,24 @@ export const UKBroadcastScreen: React.FC = () => {
             </svg>
           </div>
           <h2 style={{ fontSize: 24, fontWeight: 600, color: '#FFF', textAlign: 'center' }}>Рассылка успешно отправлена</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className={styles.container} style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <div className={styles.ambientGlow} aria-hidden="true" />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 32, background: 'rgba(255, 69, 58, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16, color: '#FF453A' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <h2 style={{ fontSize: 24, fontWeight: 600, color: '#FFF', textAlign: 'center' }}>Ошибка при отправке</h2>
         </div>
       </div>
     );
@@ -223,7 +254,7 @@ export const UKBroadcastScreen: React.FC = () => {
             </div>
 
           </div>
-          {errorAddress && <div style={{ color: '#FF453A', fontSize: 13, marginTop: 8, paddingLeft: 4 }}>Не указаны адресаты</div>}
+          {errorAddress && <div style={{ color: '#FF453A', fontSize: 13, marginTop: 4, paddingLeft: 16 }}>Не указаны адресаты</div>}
         </section>
 
         <section className={styles.animateStagger3} ref={messageRef}>
@@ -263,7 +294,7 @@ export const UKBroadcastScreen: React.FC = () => {
               <span className={styles.aiText}>Улучшить текст с ИИ</span>
             </button>
           </div>
-          {errorMessage && <div style={{ color: '#FF453A', fontSize: 13, marginTop: 8, paddingLeft: 4 }}>Не указан комментарий</div>}
+          {errorMessage && <div style={{ color: '#FF453A', fontSize: 13, marginTop: 4, paddingLeft: 16 }}>Не указан комментарий</div>}
         </section>
 
         <div className={styles.animateStagger4}>

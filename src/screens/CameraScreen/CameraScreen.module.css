@@ -233,7 +233,8 @@
 
 /* ── Hint text ────────────────────────────────────── */
 .hint {
-  margin-top: 24px;
+  position: absolute;
+  top: calc(50% + 184px + 24px);
   font-family: var(--font-family);
   font-size: var(--fs-subhead, 15px);
   font-weight: var(--fw-regular, 400);

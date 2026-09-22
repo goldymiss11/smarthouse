@@ -12,6 +12,9 @@ interface MainFeedScreenProps {
 export const MainFeedScreen: React.FC<MainFeedScreenProps> = ({ onOpenCamera, onOpenNotifications }) => {
   const [activeTab, setActiveTab] = useState<'actual' | 'archive'>('actual');
   const [isAddressDropdownOpen, setIsAddressDropdownOpen] = useState(false);
+  const [activeAddress, setActiveAddress] = useState('ул. Космонавтов 34а');
+  const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
+  const [newAddressQuery, setNewAddressQuery] = useState('');
 
   return (
     <div className={styles.screen}>
@@ -26,7 +29,7 @@ export const MainFeedScreen: React.FC<MainFeedScreenProps> = ({ onOpenCamera, on
               className={styles.addressWrap} 
               onClick={() => setIsAddressDropdownOpen(!isAddressDropdownOpen)}
             >
-              <span className={styles.addressText}>ул. Космонавтов 34а</span>
+              <span className={styles.addressText}>{activeAddress}</span>
               <svg 
                 className={styles.chevronIcon} 
                 style={{ transform: isAddressDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}
@@ -38,21 +41,30 @@ export const MainFeedScreen: React.FC<MainFeedScreenProps> = ({ onOpenCamera, on
             
             {isAddressDropdownOpen && (
               <div className={styles.addressDropdown}>
-                <div className={styles.addressDropdownItem} onClick={() => setIsAddressDropdownOpen(false)}>
+                <div className={styles.addressDropdownItem} onClick={() => { setActiveAddress('ул. Космонавтов 34а'); setIsAddressDropdownOpen(false); }}>
                   <div className={styles.addressDropdownText}>
-                    <span>ул. Космонавтов 34а</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+                    <span style={{ color: activeAddress === 'ул. Космонавтов 34а' ? 'var(--accent)' : 'inherit' }}>ул. Космонавтов 34а</span>
+                    {activeAddress === 'ул. Космонавтов 34а' && (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    )}
                   </div>
                 </div>
-                <div className={styles.addressDropdownItem} onClick={() => setIsAddressDropdownOpen(false)}>
-                  <div className={styles.addressDropdownText}>ул. Пушкинская, 42</div>
+                <div className={styles.addressDropdownItem} onClick={() => { setActiveAddress('ул. Пушкинская, 42'); setIsAddressDropdownOpen(false); }}>
+                  <div className={styles.addressDropdownText}>
+                    <span style={{ color: activeAddress === 'ул. Пушкинская, 42' ? 'var(--accent)' : 'inherit' }}>ул. Пушкинская, 42</span>
+                    {activeAddress === 'ул. Пушкинская, 42' && (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    )}
+                  </div>
                 </div>
                 <div className={styles.addressDropdownDivider} />
-                <div className={styles.addressDropdownItem} onClick={() => setIsAddressDropdownOpen(false)}>
+                <div className={styles.addressDropdownItem} onClick={() => { setIsAddressDropdownOpen(false); setIsAddAddressOpen(true); }}>
                   <div className={styles.addressDropdownAdd}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
@@ -187,6 +199,57 @@ export const MainFeedScreen: React.FC<MainFeedScreenProps> = ({ onOpenCamera, on
           <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
+      {isAddAddressOpen && (
+        <div className={styles.modalOverlay} onClick={() => setIsAddAddressOpen(false)}>
+          <div className={styles.modalSheet} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalDragHandle} />
+            <h2 className={styles.modalTitle}>Добавить адрес</h2>
+            
+            <div className={styles.searchWrap}>
+              <svg className={styles.searchIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                className={styles.searchInput}
+                placeholder="г. Ростов-на-Дону..."
+                value={newAddressQuery}
+                onChange={(e) => setNewAddressQuery(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.addressList}>
+              {['г. Ростов-на-Дону, пр. Космонавтов, 34а', 'г. Ростов-на-Дону, ул. Большая Садовая, 125', 'г. Ростов-на-Дону, ул. Пушкинская, 42'].map((address) => (
+                <button
+                  key={address}
+                  className={`${styles.addressCard} ${newAddressQuery === address ? styles['addressCard--selected'] : ''}`}
+                  onClick={() => setNewAddressQuery(address)}
+                >
+                  <span>{address}</span>
+                  {newAddressQuery === address && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
+            
+            <button 
+              className={styles.modalSubmitBtn}
+              disabled={!newAddressQuery.trim()}
+              onClick={() => {
+                setActiveAddress(newAddressQuery.trim());
+                setIsAddAddressOpen(false);
+                setNewAddressQuery('');
+              }}
+            >
+              Подтвердить
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

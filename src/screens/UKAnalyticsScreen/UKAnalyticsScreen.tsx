@@ -76,14 +76,10 @@ export const UKAnalyticsScreen: React.FC<UKAnalyticsScreenProps> = ({ onBack }) 
         <div className={styles.chartCard}>
           <div className={styles.chartHeader} style={{ position: 'relative' }}>
             Нагрузка по дням
-            {activeBar !== null && (
-              <span style={{ position: 'absolute', right: 0, color: '#BF5AF2', fontWeight: 'bold' }}>
-                {weeklyData[activeBar].value} заявок
-              </span>
-            )}
           </div>
           <div 
             className={styles.verticalChart}
+            onMouseLeave={() => setActiveBar(null)}
             onTouchStart={(e) => {
               const touch = e.touches[0];
               const chartRect = e.currentTarget.getBoundingClientRect();
@@ -103,8 +99,18 @@ export const UKAnalyticsScreen: React.FC<UKAnalyticsScreenProps> = ({ onBack }) 
             onTouchEnd={() => setActiveBar(null)}
           >
             {weeklyData.map((item, idx) => (
-              <div key={idx} className={styles.barCol}>
-                <div className={styles.barWrapper}>
+              <div 
+                key={idx} 
+                className={styles.barCol}
+                onMouseEnter={() => setActiveBar(idx)}
+              >
+                <div className={styles.barWrapper} style={{ position: 'relative' }}>
+                  {activeBar === idx && (
+                    <div className={styles.tooltipPill}>
+                      <span style={{ fontSize: 14, fontWeight: 700 }}>{item.value}</span>
+                      <span style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.8)', marginLeft: 3, letterSpacing: '-0.2px' }}>заявок</span>
+                    </div>
+                  )}
                   <div className={styles.vBar} style={{ height: `${item.value}%`, filter: activeBar === idx ? 'brightness(1.5)' : 'none' }} />
                 </div>
                 <div className={styles.barDay} style={{ color: activeBar === idx ? '#FFF' : 'rgba(235, 235, 245, 0.6)' }}>{item.day}</div>

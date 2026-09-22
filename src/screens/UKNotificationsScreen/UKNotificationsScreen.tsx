@@ -36,10 +36,29 @@ export const UKNotificationsScreen: React.FC<UKNotificationsScreenProps> = ({ on
     }
   ];
 
-  const notifications = isResidentMode ? [] : ukNotifications;
+  const residentNotifications = [
+    {
+      id: 'r1',
+      type: 'info',
+      title: 'УК "Смарт Сити"',
+      text: 'Напоминаем о необходимости передать показания счетчиков до 25 числа.',
+      time: 'Сегодня',
+      isUnread: true,
+    },
+    {
+      id: 'r2',
+      type: 'system',
+      title: 'Квитанция',
+      text: 'Счет за август оплачен успешно.',
+      time: 'Вчера',
+      isUnread: false,
+    }
+  ];
+
+  const notifications = isResidentMode ? residentNotifications : ukNotifications;
 
   const handleReadAll = () => {
-    setReadIds([...readIds, '1', '2', '3']);
+    setReadIds([...readIds, '1', '2', '3', 'r1', 'r2']);
   };
 
   const markAsRead = (id: string) => {
@@ -89,20 +108,24 @@ export const UKNotificationsScreen: React.FC<UKNotificationsScreenProps> = ({ on
       <div className={styles.ambientGlow} />
       <div className={styles.content}>
         <div className={styles.navBar}>
-          <button className={styles.backBtn} onClick={onBack}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            Назад
-          </button>
-          <div className={styles.navTitle}>Уведомления</div>
-          {notifications.length > 0 ? (
-            <button className={styles.readAllBtn} onClick={handleReadAll}>
-              Прочитать все
+          <div style={{ width: 80, display: 'flex', justifyContent: 'flex-start' }}>
+            <button className={styles.backBtn} onClick={onBack}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+              Назад
             </button>
-          ) : (
-            <div style={{ width: '40px' }} />
-          )}
+          </div>
+          <div className={styles.navTitle}>Уведомления</div>
+          <div style={{ width: 80, display: 'flex', justifyContent: 'flex-end' }}>
+            {notifications.length > 0 && (
+              <button className={styles.readAllBtn} onClick={handleReadAll}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className={styles.list}>

@@ -5,6 +5,7 @@ interface Message {
   id: number;
   sender: 'ai' | 'user';
   text: string;
+  isChart?: boolean;
 }
 
 interface BillAnalysisScreenProps {
@@ -34,6 +35,12 @@ export const BillAnalysisScreen: React.FC<BillAnalysisScreenProps> = ({ onBack }
       id: 1, 
       sender: 'ai', 
       text: 'Счет за август — 5 430 ₽. Из них:\n• Вода: 1 200 ₽\n• Отопление: 2 000 ₽\n• Электричество: 1 500 ₽\n• Прочее: 730 ₽' 
+    },
+    {
+      id: 1.5,
+      sender: 'ai',
+      text: '',
+      isChart: true
     },
     { 
       id: 2, 
@@ -95,53 +102,53 @@ export const BillAnalysisScreen: React.FC<BillAnalysisScreenProps> = ({ onBack }
       </header>
 
       <div className={styles.content}>
-        <div className={styles.chartCardWrapper}>
-          <div className={styles.chartCard}>
-            <div className={styles.chartHeader}>
-              <h3 className={styles.chartTitle}>Динамика расходов</h3>
-              <button className={styles.chartToggleBtn} onClick={() => setShowExtendedChart(!showExtendedChart)}>
-                {showExtendedChart ? 'Свернуть' : 'Подробнее'}
-              </button>
-            </div>
-            
-            <div className={styles.chartList}>
-              {(showExtendedChart ? expenseHistory : expenseHistory.slice(-2)).map((item) => (
-                <div
-                  key={item.id}
-                  className={`${styles.chartRow} ${item.isCurrent ? styles.chartRowCurrent : ''}`}
-                >
-                  <div className={styles.chartLabelRow}>
-                    <div className={styles.monthBadgeWrapper}>
-                      <span className={styles.chartMonthName}>{item.month}</span>
-                      {item.isCurrent && <span className={styles.currentMonthBadge}>Текущий</span>}
-                    </div>
-                    <span className={styles.chartAmount}>{item.amount}</span>
-                  </div>
-                  <div className={styles.barTrack}>
-                    <div
-                      className={item.isCurrent ? styles.barFillCurrent : styles.barFillBlue}
-                      style={{ width: `${item.percentage}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className={styles.chatArea}>
           {messages.map((msg) => (
             <div key={msg.id} className={`${styles.messageWrapper} ${msg.sender === 'user' ? styles.messageUser : styles.messageAi}`}>
-              <div className={styles.chatBubble}>
-                <p>{msg.text}</p>
-              </div>
+              {msg.isChart ? (
+                <div className={styles.chartCard}>
+                  <div className={styles.chartHeader}>
+                    <h3 className={styles.chartTitle}>Динамика расходов</h3>
+                    <button className={styles.chartToggleBtn} onClick={() => setShowExtendedChart(!showExtendedChart)}>
+                      {showExtendedChart ? 'Свернуть' : 'Подробнее'}
+                    </button>
+                  </div>
+                  
+                  <div className={styles.chartList}>
+                    {(showExtendedChart ? expenseHistory : expenseHistory.slice(-2)).map((item) => (
+                      <div
+                        key={item.id}
+                        className={`${styles.chartRow} ${item.isCurrent ? styles.chartRowCurrent : ''}`}
+                      >
+                        <div className={styles.chartLabelRow}>
+                          <div className={styles.monthBadgeWrapper}>
+                            <span className={styles.chartMonthName}>{item.month}</span>
+                            {item.isCurrent && <span className={styles.currentMonthBadge}>Текущий</span>}
+                          </div>
+                          <span className={styles.chartAmount}>{item.amount}</span>
+                        </div>
+                        <div className={styles.barTrack}>
+                          <div
+                            className={item.isCurrent ? styles.barFillCurrent : styles.barFillBlue}
+                            style={{ width: `${item.percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.chatBubble}>
+                  <p>{msg.text}</p>
+                </div>
+              )}
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
       </div>
 
-      <div className={styles.bottomFixed}>
+      <div className={styles.bottomFixed} style={{ bottom: window.innerHeight < 600 ? 0 : undefined }}>
         {showQuickReplies && (
           <div className={styles.quickReplies}>
             <button className={styles.quickReplyBtn} onClick={() => handleQuickReply('details')}>Подробнее</button>
