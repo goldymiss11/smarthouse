@@ -120,6 +120,7 @@ body {
   background-color: var(--sys-bg);
   min-height: 100dvh;
   overflow-x: hidden;
+  touch-action: manipulation;
 }
 
 #root {
@@ -195,4 +196,9 @@ a:not([disabled]):active,
 [class*="homeIndicator"],
 .homeIndicator {
   display: none !important;
+}
+
+/* Блокировка автозума iOS Safari при фокусе в полях ввода */
+input, textarea, select {
+  font-size: 16px !important;
 }
